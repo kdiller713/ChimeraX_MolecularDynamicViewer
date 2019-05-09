@@ -134,10 +134,10 @@
         
             // Should use the movie_record and movie_encode stuff in chimerax.
             frame = -1;
-            document.getElementById("playPause").disabled = true;
             window.location = 'kmd:MovieStart';
         }
         function startMovie(){
+            document.getElementById("playPause").disabled = true;
             timer = setInterval(movieMaker, 100);
         }
         

@@ -120,6 +120,9 @@ class MolecularDynamicsTool(HtmlToolInstance):
         if self.atomStruct == None:
             return
         
+        if self.atomStruct.deleted:
+            return
+        
         if self.atomStruct.surfaces() != []:
             self.session.models.remove([self.atomStruct.surfaces()[0]])
             

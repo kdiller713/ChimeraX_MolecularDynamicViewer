@@ -1,0 +1,206 @@
+<html>
+    <script>
+        var timer = null;
+        var frame = 0;
+        var frameCount = 10;
+        var modelName = null;
+        var attributeName = null;
+        var timeout = 100;
+
+        function start(){
+            if(timer == null){
+                timer = setInterval(display, timeout);
+                updateDisplay();
+            }
+        }
+        
+        function fpsChange(){
+            var fps = document.getElementById("fps").value;
+            timeout = 1000 / fps;
+            timeout = Math.min(1000, Math.max(10, timeout));
+            updateDisplay();
+        }
+
+        function stop(){
+            if(timer != null){
+                clearTimeout(timer);
+                timer = null;
+                updateDisplay();
+            }
+        }
+        
+        function playPauseClick(){
+            var playPause = document.getElementById("playPause");
+            var text = playPause.value;
+            
+            if(text === "Stop"){
+                stop();
+            }else if(text === "Start"){
+                start();
+            }
+        }
+
+        function display(){
+            if(modelName == null){
+                stop();
+                return;
+            }
+            
+            var type = document.getElementById('surface').checked ? 'T' : 'F';
+            
+            frame = (frame + 1) % frameCount;
+            window.location = 'kmd:FrameChange_' + type + '_' + frame;
+            updateDisplay();
+        }
+        
+        function reset(){
+            stop();
+            frame = 0;
+            attributeName = null;
+            updateDisplay();
+            document.getElementById('attributeName').innerHTML = "Attribute:";
+        }
+        
+        function updateDisplay(){
+            if(modelName != null){
+                document.getElementById("frameNum").style.visibility = 'visible';
+                document.getElementById("frameNum").value = frame;
+                document.getElementById("frameNum").max = frameCount - 1;
+                document.getElementById("frame").innerHTML = " out of " + frameCount;
+                document.getElementById("filename").innerHTML = "Filename: " + modelName;
+            }
+            
+            if(attributeName != null){
+                document.getElementById('attributeName').innerHTML = "Attribute: " + attributeName;
+            }
+            
+            if(timer == null){
+                document.getElementById("playPause").innerHTML = "Start";
+                document.getElementById("playPause").value = "Start";
+                document.getElementById("prev").disabled = false;
+                document.getElementById("next").disabled = false;
+                document.getElementById("open").disabled = false;
+                document.getElementById("frameNum").disabled = false;
+                document.getElementById("fps").disabled = false;
+                document.getElementById("movie").disabled = false;
+                document.getElementById("attribute").disabled = false;
+                document.getElementById("surface").disabled = false;
+            }else{
+                document.getElementById("playPause").innerHTML = "Stop";
+                document.getElementById("playPause").value = "Stop";
+                document.getElementById("prev").disabled = true;
+                document.getElementById("next").disabled = true;
+                document.getElementById("open").disabled = true;
+                document.getElementById("frameNum").disabled = true;
+                document.getElementById("fps").disabled = true;
+                document.getElementById("movie").disabled = true;
+                document.getElementById("attribute").disabled = true;
+                document.getElementById("surface").disabled = true;
+            }
+        }
+        
+        function openBtn(){
+            window.location = 'kmd:Open';
+        }
+        
+        function attributeOpen(){
+            if(modelName == null){
+                alert("Select a MD file first");
+                return;
+            }
+        
+            window.location = 'kmd:Attribute';
+        }
+        
+        function prev(){
+            frame = (frame - 2 + frameCount) % frameCount;
+            display();
+        }
+        
+        function next(){
+            display();
+        }
+        
+        function frameChangeValue(){
+            frame = document.getElementById("frameNum").value - 1;
+            display();
+        }
+        
+        function movie(){
+            if(modelName == null){
+                alert("Open a model first");
+                return;
+            }
+        
+            // Should use the movie_record and movie_encode stuff in chimerax.
+            frame = -1;
+            document.getElementById("playPause").disabled = true;
+            window.location = 'kmd:MovieStart';
+        }
+        function startMovie(){
+            timer = setInterval(movieMaker, 100);
+        }
+        
+        function movieMaker(){
+            var prevFrame = frame;
+            display();
+            
+            if(prevFrame != -1 && frame == 0){
+                stopMovie();
+            }
+        }
+        
+        function stopMovie(){
+            document.getElementById("playPause").disabled = false;
+            clearTimeout(timer);
+            timer = null;
+            updateDisplay();
+            window.location = 'kmd:MovieDone';
+        }
+    </script>
+    
+    <body>
+        <h3 id="title">Molecular Dynamics Viewer v1.0</h3>
+        <button type="button" id="prev" onclick="prev()">
+            Previous
+        </button>
+        <button type="button" id="playPause" onclick="playPauseClick()" value="Start">
+            Start
+        </button>
+        <button type="button" id="next" onclick="next()">
+            Next
+        </button>
+        
+        <button type="button" id="movie" onclick="movie()">
+            Make Movie
+        </button>
+        
+        <input type=checkbox id="surface">Surface</input>
+        
+        <br>
+        <br>
+        
+        <label id="fpsID" for="fps">Frames per Second:</label>
+        <input id="fps" type="number" min="1" max="100" value="10" oninput="fpsChange()"/>
+        
+        <br>
+        <br>
+        <button type="button" id="open" onclick="openBtn()">
+            Open
+        </button>
+        <label id="filename" for="open">Filename:</label>
+        
+        <br>
+        
+        <button type="button" id="attribute" onclick="attributeOpen()">
+            Open Attribute
+        </button>
+        <label id="attributeName" for="attribute">Attribute:</label>
+        <br>
+        <br>
+            
+        <label for="frameNum">Frame:</label>
+        <input id="frameNum" type="number" style="visibility:hidden" oninput="frameChangeValue()" min="0" max="0"/>
+        <label id="frame" for="frameNum"></label>
+    </body>
+<html>

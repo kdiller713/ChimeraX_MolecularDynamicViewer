@@ -5,7 +5,7 @@ from chimerax.core.commands import run
 from chimerax.movie.moviecmd import movie_record, movie_encode
 from chimerax.surface.surfacecmds import surface
 
-from PyQt5.QtWidgets import QFileDialog
+from PySide2.QtWidgets import QFileDialog
 
 from numpy import array, float64
 

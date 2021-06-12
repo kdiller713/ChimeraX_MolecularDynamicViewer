@@ -37,8 +37,16 @@ ifeq ($(OS),Darwin)
 CHIMERAX_EXE = $(CHIMERAX_APP)/Contents/bin/ChimeraX
 endif
 ifeq ($(OS),Linux)
-#CHIMERAX_EXE = $(shell which chimerax)
-CHIMERAX_EXE = $(shell which chimerax-daily)
+CHIMERAX_RELEASE_EXE = $(shell which chimerax)
+CHIMERAX_DAILY_EXE = $(shell which chimerax-daily)
+
+# Determines which chimerax command to use
+ifeq ($(CHIMERAX_DAILY_EXE),)
+CHIMERAX_EXE=$(CHIMERAX_RELEASE_EXE)
+else
+CHIMERAX_EXE=$(CHIMERAX_DAILY_EXE)
+endif
+
 endif
 RUN = $(CHIMERAX_EXE) --nogui --exit --cmd
 

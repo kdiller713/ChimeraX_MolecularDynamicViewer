@@ -139,6 +139,13 @@ class MolecularDynamicsTool(HtmlToolInstance):
         locs = self.atomLocation[frame]
         atms = self.atomStruct.atoms
         
+        if(len(locs) != len(atms.coords)):
+            newLocs = []
+            for ind in range(len(atms.coords)):
+                newLocs.append(locs[atms.coord_indices[ind]])
+            locs = newLocs
+                
+        # Update the final locs
         atms.coords = locs
         
         if surf:
@@ -170,7 +177,7 @@ class MolecularDynamicsTool(HtmlToolInstance):
         if self.atomStruct != None:
             self.deleteModel()
         
-        # This create a simple Oxygen atom
+        # This creates a simple Oxygen atom
         # Need to get this to display
         self.atomStruct = AtomicStructure(self.session)
         

@@ -196,7 +196,7 @@ class MolecularDynamicsTool(HtmlToolInstance):
                 res = None
             elif line.startswith("ENDMDL"):
                 self.atomLocation.append(array(coords))
-            elif line.startswith("ATOM"):
+            elif line.startswith("ATOM") or line.startswith("HETATM"):
                 x = float(line[30:38].strip())
                 y = float(line[38:46].strip())
                 z = float(line[46:54].strip())

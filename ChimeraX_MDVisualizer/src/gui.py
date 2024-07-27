@@ -136,6 +136,11 @@ class MolecularDynamicsTool(HtmlToolInstance):
     
     # This is to move the atoms
     def changeModel(self, frame, surf):
+        if self.atomStruct.deleted:
+            js = "modelName = null; frameCount = 0; reset();"
+            self.html_view.runJavaScript(js)
+            return
+        
         locs = self.atomLocation[frame]
         atms = self.atomStruct.atoms
         

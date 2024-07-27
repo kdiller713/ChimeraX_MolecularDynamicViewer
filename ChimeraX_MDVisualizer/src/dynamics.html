@@ -68,10 +68,18 @@
                 document.getElementById("frameNum").max = frameCount - 1;
                 document.getElementById("frame").innerHTML = " out of " + frameCount;
                 document.getElementById("filename").innerHTML = "Filename: " + modelName;
+            } else {
+                document.getElementById("frameNum").style.visibility = 'hidden';
+                document.getElementById("frameNum").value = 0;
+                document.getElementById("frameNum").max = 0;
+                document.getElementById("frame").innerHTML = "";
+                document.getElementById("filename").innerHTML = "Filename: ";
             }
             
             if(attributeName != null){
                 document.getElementById('attributeName').innerHTML = "Attribute: " + attributeName;
+            } else {
+                document.getElementById('attributeName').innerHTML = "Attribute: ";
             }
             
             if(timer == null){
@@ -136,6 +144,7 @@
             frame = -1;
             window.location = 'kmd:MovieStart';
         }
+        
         function startMovie(){
             document.getElementById("playPause").disabled = true;
             timer = setInterval(movieMaker, timeout);
@@ -160,7 +169,7 @@
     </script>
     
     <body>
-        <h3 id="title">Molecular Dynamics Viewer v1.2</h3>
+        <h3 id="title">Molecular Dynamics Viewer</h3>
         <button type="button" id="prev" onclick="prev()">
             Previous
         </button>

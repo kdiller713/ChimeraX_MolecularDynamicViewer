@@ -6,7 +6,7 @@ will be displayed without the ChimeraX- prefix.
 -->
 
 <BundleInfo name="MolecularDynamicsViewer"
-        version="1.5" package="com.kdiller.dynamics.viewer"
+        version="1.6" package="com.kdiller.dynamics.viewer"
         minSessionVersion="1" maxSessionVersion="1">
 
   <!-- Additional information about bundle source -->
@@ -60,5 +60,9 @@ will be displayed without the ChimeraX- prefix.
     <!-- ChimeraX :: Tool :: <Name> :: General :: <Description> -->
     <ChimeraXClassifier>ChimeraX :: Tool :: Molecular Dynamics Viewer :: General :: Shows a UI to display Molecular Dynamics </ChimeraXClassifier>
   </Classifiers>
+  
+  <Providers>
+     <Provider name="kmd" manager="url_schemes"/>
+  </Providers>
 
 </BundleInfo>
